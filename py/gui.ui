@@ -1,0 +1,310 @@
+<?xml version='1.0' encoding='utf-8'?>
+<interface>
+  <object class="tk.Frame" id="main">
+    <property name="cursor">arrow</property>
+    <property name="height">200</property>
+    <property name="padx">0</property>
+    <property name="width">600</property>
+    <layout>
+      <property name="column">0</property>
+      <property name="propagate">False</property>
+      <property name="row">0</property>
+    </layout>
+    <child>
+      <object class="ttk.Label" id="title">
+        <property name="anchor">w</property>
+        <property name="font">{Source Code Pro Black} 16 {}</property>
+        <property name="justify">center</property>
+        <property name="text" translatable="yes">Energize Andover Energy Application</property>
+        <layout>
+          <property name="column">0</property>
+          <property name="columnspan">10</property>
+          <property name="propagate">True</property>
+          <property name="row">0</property>
+          <property name="sticky">nw</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="ttk.Frame" id="floor_container">
+        <property name="height">200</property>
+        <property name="width">200</property>
+        <layout>
+          <property name="column">0</property>
+          <property name="padx">5</property>
+          <property name="propagate">True</property>
+          <property name="row">1</property>
+          <property name="sticky">nw</property>
+        </layout>
+        <child>
+          <object class="ttk.Label" id="floor">
+            <property name="font">{Source Code Pro Black} 12 {}</property>
+            <property name="justify">center</property>
+            <property name="relief">flat</property>
+            <property name="text" translatable="yes">Floors</property>
+            <layout>
+              <property name="column">0</property>
+              <property name="propagate">True</property>
+              <property name="row">0</property>
+              <property name="sticky">nw</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Label" id="spacer2">
+            <layout>
+              <property name="column">0</property>
+              <property name="propagate">True</property>
+              <property name="row">1</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Frame" id="floor_radio_container">
+            <property name="height">200</property>
+            <property name="width">200</property>
+            <layout>
+              <property name="column">0</property>
+              <property name="padx">5</property>
+              <property name="propagate">True</property>
+              <property name="row">2</property>
+            </layout>
+            <child>
+              <object class="ttk.Radiobutton" id="Radiobutton_1">
+                <property name="command">get_floor</property>
+                <property name="cursor">arrow</property>
+                <property name="state">normal</property>
+                <property name="text" translatable="yes">1st Floor</property>
+                <property name="value">1</property>
+                <property name="variable">int:floor_num</property>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Radiobutton" id="Radiobutton_2">
+                <property name="command">get_floor</property>
+                <property name="text" translatable="yes">2nd Floor</property>
+                <property name="value">2</property>
+                <property name="variable">int:floor_num</property>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="propagate">True</property>
+                  <property name="row">1</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Radiobutton" id="Radiobutton_3">
+                <property name="command">get_floor</property>
+                <property name="text" translatable="yes">3rd Floor</property>
+                <property name="value">3</property>
+                <property name="variable">int:floor_num</property>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="propagate">True</property>
+                  <property name="row">2</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="ttk.Frame" id="wing_container">
+        <property name="height">200</property>
+        <property name="width">200</property>
+        <layout>
+          <property name="column">1</property>
+          <property name="propagate">True</property>
+          <property name="row">1</property>
+          <property name="sticky">nw</property>
+        </layout>
+        <child>
+          <object class="ttk.Label" id="wing_label">
+            <property name="anchor">w</property>
+            <property name="font">{Source Code Pro Black} 12 {}</property>
+            <property name="text" translatable="yes">Wings</property>
+            <property name="underline">0</property>
+            <layout>
+              <property name="column">0</property>
+              <property name="propagate">True</property>
+              <property name="row">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Label" id="spacer1">
+            <property name="compound">bottom</property>
+            <property name="cursor">arrow</property>
+            <property name="font">TkDefaultFont</property>
+            <property name="takefocus">true</property>
+            <property name="underline">0</property>
+            <property name="width">1</property>
+            <layout>
+              <property name="column">0</property>
+              <property name="propagate">True</property>
+              <property name="row">1</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Frame" id="radio_container">
+            <property name="height">200</property>
+            <property name="width">200</property>
+            <layout>
+              <property name="column">0</property>
+              <property name="propagate">True</property>
+              <property name="row">2</property>
+            </layout>
+            <child>
+              <object class="ttk.Radiobutton" id="Radiobutton_A">
+                <property name="command">get_wing</property>
+                <property name="text" translatable="yes">A</property>
+                <property name="value">A</property>
+                <property name="variable">string:wing_var</property>
+                <property name="width">0</property>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Radiobutton" id="Radiobutton_B">
+                <property name="command">get_wing</property>
+                <property name="text" translatable="yes">B</property>
+                <property name="value">B</property>
+                <property name="variable">string:wing_var</property>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="propagate">True</property>
+                  <property name="row">1</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Radiobutton" id="Radiobutton_C">
+                <property name="command">get_wing</property>
+                <property name="text" translatable="yes">C</property>
+                <property name="value">C</property>
+                <property name="variable">string:wing_var</property>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="propagate">True</property>
+                  <property name="row">2</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Radiobutton" id="Radiobutton_D">
+                <property name="command">get_wing</property>
+                <property name="text" translatable="yes">D</property>
+                <property name="value">D</property>
+                <property name="variable">string:wing_var</property>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="propagate">True</property>
+                  <property name="row">3</property>
+                </layout>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="ttk.Frame" id="output">
+        <property name="height">200</property>
+        <property name="width">200</property>
+        <layout>
+          <property name="column">2</property>
+          <property name="padx">5</property>
+          <property name="propagate">True</property>
+          <property name="row">1</property>
+          <property name="sticky">nw</property>
+        </layout>
+        <child>
+          <object class="ttk.Label" id="avg_values">
+            <property name="font">{Source Code Pro Black} 12 {}</property>
+            <property name="text" translatable="yes">Average Value</property>
+            <property name="width">0</property>
+            <layout>
+              <property name="column">1</property>
+              <property name="propagate">True</property>
+              <property name="row">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Label" id="spacer3">
+            <property name="cursor">arrow</property>
+            <property name="takefocus">true</property>
+            <layout>
+              <property name="column">0</property>
+              <property name="propagate">True</property>
+              <property name="row">1</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Label" id="co2_label">
+            <property name="text" translatable="yes">CO2</property>
+            <layout>
+              <property name="column">0</property>
+              <property name="ipadx">5</property>
+              <property name="propagate">True</property>
+              <property name="row">2</property>
+              <property name="sticky">e</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Label" id="temp_label">
+            <property name="text" translatable="yes">Temperature</property>
+            <property name="underline">0</property>
+            <layout>
+              <property name="column">0</property>
+              <property name="ipadx">5</property>
+              <property name="propagate">True</property>
+              <property name="row">3</property>
+              <property name="sticky">e</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="tk.Message" id="avg_co2_out">
+            <property name="anchor">w</property>
+            <property name="cursor">arrow</property>
+            <property name="font">TkDefaultFont</property>
+            <property name="text" translatable="yes">N/A</property>
+            <layout>
+              <property name="column">1</property>
+              <property name="propagate">True</property>
+              <property name="row">2</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="tk.Message" id="avg_temp_out">
+            <property name="font">TkDefaultFont</property>
+            <property name="text" translatable="yes">N/A</property>
+            <layout>
+              <property name="column">1</property>
+              <property name="propagate">True</property>
+              <property name="row">3</property>
+            </layout>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>
