@@ -1,5 +1,5 @@
 import pandas as pd
-from py.bacnet_gateway_requests import get_value_and_units
+from energyWork.py.bacnet_gateway_requests import get_value_and_units
 import argparse
 import tkinter as tk  # for python 3
 import pygubu
@@ -10,7 +10,7 @@ import sys
 # Import the config CSV
 ahs_csv = pd.read_csv('../csv/ahs_air_wing.csv', na_filter=False, comment='#')
 
-# Initialize variables
+# Initialize global variables
 wing = 'D'
 floor = 3
 
@@ -34,12 +34,14 @@ class Application:
         global floor
         floor = self.builder.get_variable('floor_num').get()
         print("Floor Num: ", self.builder.get_variable('floor_num').get())
+        print (floor)
 
     def get_wing(self):
         # Get the wing
         global wing
         wing = self.builder.get_variable('wing_var').get()
         print("Wing: ", self.builder.get_variable('wing_var').get())
+        print(wing)
 
 
 def update_data():

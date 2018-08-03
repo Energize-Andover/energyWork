@@ -1,0 +1,47 @@
+Starting update_data process
+Staring Tkinter application
+Updating Data
+Wing -  D
+Floor -  3
+   Label Facility  Temperature      CO2 Wing Floor
+49   335      ahs      3001848  3001836    D     3
+50   337      ahs      3001822  3001810    D     3
+51   339      ahs      3001796  3001784    D     3
+52   341      ahs      3001770  3001758    D     3
+53   343      ahs      3001744  3001732    D     3
+54   345      ahs      3001718  3001706    D     3
+55   347      ahs      3001692  3001680    D     3
+56   349      ahs      3001666  3001654    D     3
+57   351      ahs      3001489  3001477    D     3
+Facility - ahs | Room - 335
+Room 335 --> Temp - 82.80523681640625, CO2 Lvl - 646.7744140625
+Facility - ahs | Room - 337
+Room 337 --> Temp - 86.8272705078125, CO2 Lvl - 725.125244140625
+Facility - ahs | Room - 339
+Room 339 --> Temp - 84.336181640625, CO2 Lvl - 571.852783203125
+Facility - ahs | Room - 341
+Room 341 --> Temp - 83.66152954101562, CO2 Lvl - 656.802734375
+Facility - ahs | Room - 343
+Room 343 --> Temp - 82.31219482421875, CO2 Lvl - 447.43603515625
+Facility - ahs | Room - 345
+Room 345 --> Temp - 82.41598510742188, CO2 Lvl - 1130.66015625
+Facility - ahs | Room - 347
+Room 347 --> Temp - 81.42996215820312, CO2 Lvl - 569.13525390625
+Facility - ahs | Room - 349
+Room 349 --> Temp - 82.6495361328125, CO2 Lvl - 603.037841796875
+Facility - ahs | Room - 351
+Room 351 --> Temp - 81.89703369140625, CO2 Lvl - 564.34765625
+Label          83.148326
+Facility       83.148326
+Temperature    83.148326
+CO2            83.148326
+Wing           83.148326
+Floor          83.148326
+dtype: float64
+Label          657.241347
+Facility       657.241347
+Temperature    657.241347
+CO2            657.241347
+Wing           657.241347
+Floor          657.241347
+dtype: float64
