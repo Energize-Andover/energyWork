@@ -5,18 +5,27 @@ import tkinter as tk  # for python 3
 import pygubu
 import datetime
 from time import sleep
-from multiprocessing import Process
+from multiprocessing import Process, Value
 import sys
 
 
 # Import the config CSV
 ahs_csv = pd.read_csv('../csv/ahs_air_wing.csv', na_filter=False, comment='#')
 
+# Import the CSV that contains all the last known data
+csv_co2_data = pd.read_csv('../csv/co2.csv')
+csv_temp_data = pd.read_csv('../csv/temp.csv')
+
+
 # Initialize global variables
 wing = 'D'
 floor = 3
 last_time = datetime.datetime.utcnow() - datetime.timedelta(seconds=60)
+last_time2 = datetime.datetime.utcnow() - datetime.timedelta(seconds=10)
 print(last_time)
+
+temp_mp = Value("d", 0)
+co2_mp = Value("d", 0)
 
 
 class Application:
@@ -75,7 +84,7 @@ root = tk.Tk()
 app = Application(root)
 
 
-def update_data(wng, flr):
+def update_data(wng, flr, co2, temp):
     # Update data
     print("Updating Data")
 
@@ -104,8 +113,12 @@ def update_data(wng, flr):
 
         print("Room " + str(row['Label']) + " --> Temp - " + str(temp_val) + ", CO2 Lvl - " + str(co2_val))
 
-        temp_return += temp_val
-        co2_return += co2_val
+        try:
+            temp_return += float(temp_val)
+            co2_return += float(co2_val)
+        except TypeError:
+            print("Encountered TypeError, exiting process")
+            return
 
     # Finds the average temp and CO2 levels of the wing
     temp_return /= df_rows
@@ -115,8 +128,8 @@ def update_data(wng, flr):
     print(temp_return['Temperature'])
     print(co2_return['CO2'])
 
-    Application.update_co2(app, co2_return['CO2'])
-    Application.update_temp(app, temp_return['Temperature'])
+    temp.value = temp_return["Temperature"]
+    co2.value = co2_return['CO2']
 
     return
 
@@ -133,7 +146,7 @@ def start_update(lasttime, wng, flr):
         last_time = datetime.datetime.utcnow()
 
         try:
-            process_update_data = Process(target=update_data, args=(wng, flr))
+            process_update_data = Process(target=update_data, args=(wng, flr, co2_mp, temp_mp))
             process_update_data.start()
             # update_data(wng, flr)
             print("Update started")
@@ -192,8 +205,23 @@ try:
         print("Staring Tkinter application")
 
         while True:
+            # try:
+            #     t1 = open('tempfile_temp.txt', 'r')
+            #     t2 = open('tempfile_co2.txt', 'r')
+            #
+            #     Application.update_co2(app, )
+            #     Application.update_temp(app, )
+            # except AttributeError:
+            #     print("derp")
+
+            if (datetime.datetime.utcnow() - last_time2).seconds >= 10:
+                Application.update_co2(app, round(co2_mp.value, 1))
+                Application.update_temp(app, round(temp_mp.value, 1))
+                last_time2 = datetime.datetime.utcnow()
+
             root.update_idletasks()
             root.update()
+            sleep(0.1)
 
 
 except KeyboardInterrupt:
