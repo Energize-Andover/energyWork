@@ -283,9 +283,11 @@
         <child>
           <object class="tk.Message" id="avg_co2_out">
             <property name="anchor">w</property>
+            <property name="background">#ffffff</property>
             <property name="cursor">arrow</property>
             <property name="font">TkDefaultFont</property>
             <property name="text" translatable="yes">N/A</property>
+            <property name="textvariable">string:avg_co2_out</property>
             <layout>
               <property name="column">1</property>
               <property name="propagate">True</property>
@@ -295,8 +297,10 @@
         </child>
         <child>
           <object class="tk.Message" id="avg_temp_out">
+            <property name="background">#ffffff</property>
             <property name="font">TkDefaultFont</property>
             <property name="text" translatable="yes">N/A</property>
+            <property name="textvariable">string:avg_temp_out</property>
             <layout>
               <property name="column">1</property>
               <property name="propagate">True</property>

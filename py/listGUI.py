@@ -3,9 +3,11 @@ from energyWork.py.bacnet_gateway_requests import get_value_and_units
 import argparse
 import tkinter as tk  # for python 3
 import pygubu
+import datetime
 from time import sleep
 from multiprocessing import Process
 import sys
+
 
 # Import the config CSV
 ahs_csv = pd.read_csv('../csv/ahs_air_wing.csv', na_filter=False, comment='#')
@@ -13,6 +15,8 @@ ahs_csv = pd.read_csv('../csv/ahs_air_wing.csv', na_filter=False, comment='#')
 # Initialize global variables
 wing = 'D'
 floor = 3
+last_time = datetime.datetime.utcnow() - datetime.timedelta(seconds=60)
+print(last_time)
 
 
 class Application:
@@ -29,12 +33,18 @@ class Application:
 
         builder.connect_callbacks(self)
 
+        self.avg_co2_out = builder.get_variable('avg_co2_out')
+        self.avg_temp_out = builder.get_variable('avg_temp_out')
+
     def get_floor(self):
         # Get the value of floor_num
         global floor
         floor = self.builder.get_variable('floor_num').get()
         print("Floor Num: ", self.builder.get_variable('floor_num').get())
-        print (floor)
+        print(floor)
+
+        # Start the update process
+        start_update(last_time, wing, floor)
 
     def get_wing(self):
         # Get the wing
@@ -43,52 +53,98 @@ class Application:
         print("Wing: ", self.builder.get_variable('wing_var').get())
         print(wing)
 
+        # Start the update process
+        start_update(last_time, wing, floor)
 
-def update_data():
-    while True:
+    def update_co2(self, co2):
+        print(co2)
+        self.builder.get_variable('avg_co2_out').set(str(co2))
+        root.update()
 
-        print("Updating Data")
+    def update_temp(self, temp):
+        print(temp)
+        self.builder.get_variable('avg_temp_out').set(str(temp))
+        root.update()
 
-        # Focus data selection to be of the specific floor and wing
+    def test(self):
+        self.builder.get_variable('avg_temp_out').set(str(2))
+
+
+# Setup Tkinter
+root = tk.Tk()
+app = Application(root)
+
+
+def update_data(wng, flr):
+    # Update data
+    print("Updating Data")
+
+    # Focus data selection to be of the specific floor and wing
+    try:
+        print("Wing - ", wng)
+        print("Floor - ", flr)
+        df_focus = ahs_csv[(ahs_csv['Wing'] == wng) & (ahs_csv['Floor'] == str(flr))]
+        print(df_focus)
+    except:
+        print('Error Occurred')
+        return
+
+    temp_return = 0
+    co2_return = 0
+    df_rows = df_focus.count()
+
+    # Iterate over the rows of the focused dataframe, getting temperature and CO2 values for each location
+    for index, row in df_focus.iterrows():
+        # Prints the target
+        print("Facility - " + str(row['Facility']) + " | Room - " + str(row['Label']))
+
+        # Retrieves the values
+        temp_val, temp_units = retrieve_data(args, row['Facility'], row['Temperature'])
+        co2_val, co2_units = retrieve_data(args, row['Facility'], row['CO2'])
+
+        print("Room " + str(row['Label']) + " --> Temp - " + str(temp_val) + ", CO2 Lvl - " + str(co2_val))
+
+        temp_return += temp_val
+        co2_return += co2_val
+
+    # Finds the average temp and CO2 levels of the wing
+    temp_return /= df_rows
+    co2_return /= df_rows
+
+    # Print the found values
+    print(temp_return['Temperature'])
+    print(co2_return['CO2'])
+
+    Application.update_co2(app, co2_return['CO2'])
+    Application.update_temp(app, temp_return['Temperature'])
+
+    return
+
+
+def start_update(lasttime, wng, flr):
+    print(lasttime)
+    print(datetime.datetime.utcnow())
+    # If 60 seconds have passed since the last update data
+    print("Change in time: " + str((datetime.datetime.utcnow() - lasttime).seconds))
+
+    if (datetime.datetime.utcnow() - lasttime).seconds >= 60:
+        # Set the new last time
+        global last_time
+        last_time = datetime.datetime.utcnow()
+
         try:
-            global wing
-            global floor
-            print("Wing - ", wing)
-            print("Floor - ", floor)
-            df_focus = ahs_csv[(ahs_csv['Wing'] == wing) & (ahs_csv['Floor'] == str(floor))]
-            print(df_focus)
-        except:
-            print('Error Occurred')
+            process_update_data = Process(target=update_data, args=(wng, flr))
+            process_update_data.start()
+            # update_data(wng, flr)
+            print("Update started")
             return
-
-        temp_return = 0
-        co2_return = 0
-        df_rows = df_focus.count()
-
-        # Iterate over the rows of the focused dataframe, getting temperature and CO2 values for each location
-        for index, row in df_focus.iterrows():
-            # Prints the target
-            print("Facility - " + str(row['Facility']) + " | Room - " + str(row['Label']))
-
-            # Retrieves the values
-            temp_val, temp_units = retrieve_data(args, row['Facility'], row['Temperature'])
-            co2_val, co2_units = retrieve_data(args, row['Facility'], row['CO2'])
-
-            print("Room " + str(row['Label']) + " --> Temp - " + str(temp_val) + ", CO2 Lvl - " + str(co2_val))
-
-            temp_return += temp_val
-            co2_return += co2_val
-
-        # Finds the average temp and CO2 levels of the wing
-        temp_return /= df_rows
-        co2_return /= df_rows
-
-        print(temp_return)
-        print(co2_return)
-
-
-        # root.update()
-        sleep(3)
+        except KeyboardInterrupt:
+            process_update_data.join()
+            process_update_data.terminate()
+            sys.exit(2)
+    else:
+        print("Update process already running")
+        return
 
 
 def retrieve_data(arguments, facility, value):
@@ -126,22 +182,20 @@ try:
     # print(ahs_csv[ahs_csv['Wing'] == 'A'])
 
     if __name__ == '__main__':
-        # Setup Tkinter
-        root = tk.Tk()
-        app = Application(root)
-
         # Start the update process, which calls the update_data function
         print("Starting update_data process")
-        process_update_data = Process(target=update_data)
-        process_update_data.start()
-        # process_update_data.join()
+        start_update(last_time, wing, floor)
+
+        # Application.test(app)
 
         # Start the Tkinter frontend application
         print("Staring Tkinter application")
-        root.mainloop()
+
+        while True:
+            root.update_idletasks()
+            root.update()
 
 
 except KeyboardInterrupt:
     print('Terminating Program')
-    process_update_data.terminate()
     sys.exit()
